@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen escolar interactivo — Sexto grado</title>
+<style>
+:root {
+  --primary: #4f46e5;
+  --background: #f3f5fb;
+  --text: #1e293b;
+  --border: #dce2ed;
+  --green: #15803d;
+  --red: #dc2626;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+header {
+  background: white;
+  text-align: center;
+  padding: 22px 12px;
+  border-bottom: 1px solid var(--border);
+}
+header h1 { margin: 0; font-size: 25px; }
+header p { color: #64748b; margin-bottom: 0; }
+main { max-width: 900px; margin: 25px auto; padding: 0 14px; }
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 5px 20px #00000008;
+  margin-bottom: 18px;
+}
+h2 { margin-top: 0; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.subject {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 13px;
+  padding: 18px;
+  font-size: 17px;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+}
+.subject span { display: block; font-size: 30px; }
+.subject.selected {
+  border-color: var(--primary);
+  background: #eef2ff;
+}
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.primary { background: var(--primary); color: white; }
+.secondary { background: #e2e8f0; color: var(--text); }
+button:disabled { opacity: .4; cursor: not-allowed; }
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+}
+.hidden { display: none !important; }
+.muted { color: #64748b; }
+.progress {
+  background: #e2e8f0;
+  height: 8px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 14px 0 22px;
+}
+#progressBar {
+  width: 0;
+  height: 100%;
+  background: var(--primary);
+  transition: width .2s;
+}
+.question {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.question h3 { font-size: 16px; }
+.option {
+  display: flex;
+  gap: 10px;
+  padding: 11px;
+  margin: 7px 0;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.option:has(input:checked) {
+  background: #eef2ff;
+  border-color: var(--primary);
+}
+input[type=radio] { accent-color: var(--primary); }
+select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font: inherit;
+  background: white;
+}
+textarea { min-height: 90px; resize: vertical; }
+.matchrow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 13px 0;
+  align-items: center;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.stat {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.stat b { display: block; font-size: 24px; }
+.score { font-size: 42px; color: var(--primary); font-weight: bold; }
+.review {
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--red);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 12px 0;
+}
+.review.pending { border-left-color: #d97706; }
+.review.correct { border-left-color: var(--green); }
+@media(max-width:600px) {
+  .grid, .stats { grid-template-columns: 1fr 1fr; }
+  .matchrow { grid-template-columns: 1fr; }
+  .actions button { flex: 1; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>📘 Examen escolar interactivo</h1>
+  <p>Primera prueba sumativa · Sexto grado · 2026</p>
+</header>
+
+<main>
+<section id="home" class="card">
+  <h2>Selecciona la materia</h2>
+  <p class="muted">Selecciona una materia para iniciar tu práctica.</p>
+  <div id="subjects" class="grid"></div>
+  <div class="actions">
+    <span id="selectedLabel" class="muted">Ninguna materia seleccionada</span>
+    <button id="nextHome" class="primary" disabled>Siguiente →</button>
+  </div>
+</section>
+
+<section id="instructions" class="card hidden">
+  <h2 id="instructionTitle">Instrucciones</h2>
+  <p>El examen contiene 30 preguntas en tres partes.</p>
+  <ol>
+    <li><b>Selección única:</b> 20 preguntas con cuatro opciones.</li>
+    <li><b>Relacionar:</b> 5 relaciones entre conceptos.</li>
+    <li><b>Respuesta escrita:</b> 5 preguntas abiertas.</li>
+  </ol>
+  <p class="muted">Tus respuestas se conservarán al navegar. Las respuestas abiertas que no puedan calificarse con seguridad quedarán pendientes de revisión.</p>
+  <div class="actions">
+    <button id="backHome" class="secondary">← Volver</button>
+    <button id="start" class="primary">Comenzar examen →</button>
+  </div>
+</section>
+
+<section id="exam" class="card hidden">
+  <p class="muted" id="partLabel"></p>
+  <h2 id="partTitle"></h2>
+  <p id="partInstructions"></p>
+  <p id="pageLabel" class="muted"></p>
+  <div class="progress"><div id="progressBar"></div></div>
+  <div id="questions"></div>
+  <div class="actions">
+    <button id="previous" class="secondary">← Anterior</button>
+    <button id="next" class="primary">Siguiente →</button>
+  </div>
+</section>
+
+<section id="results" class="card hidden">
+  <h2>Resultados del examen</h2>
+  <div id="scoreArea"></div>
+  <div id="review"></div>
+  <div class="actions">
+    <button id="retry" class="secondary">Repetir examen</button>
+    <button id="change" class="primary">Cambiar materia</button>
+  </div>
+</section>
+</main>
+
+<script>
+const bank = {
+"Español": {
+icon:"📚",
+desc:"Lenguaje popular, lenguaje figurado, interpretación de obras, esquemas, prefijos y sufijos.",
+mc:[
+["¿Cuál expresión pertenece al lenguaje popular?",["Está lloviendo a cántaros","El agua tiene dos átomos de hidrógeno","La Tierra gira alrededor del Sol","El libro tiene cien páginas"],0,"«Llover a cántaros» es una expresión popular que significa que llueve mucho."],
+["¿Qué significa «meter la pata»?",["Cometer un error","Caminar rápidamente","Entrar en una casa","Ayudar a alguien"],0,"«Meter la pata» es una expresión popular que significa cometer un error."],
+["¿Cuál es un ejemplo de lenguaje figurado?",["Sus ojos eran dos estrellas","El lápiz es amarillo","La puerta está abierta","La mesa tiene cuatro patas"],0,"La comparación presenta los ojos como estrellas para destacar su brillo."],
+["¿Qué significa «tiene un corazón de piedra»?",["Es una persona poco sensible","Tiene una enfermedad de piedra","Le gusta coleccionar piedras","Es muy deportista"],0,"La expresión figurada describe a alguien que parece no sentir compasión."],
+["¿Cuál frase utiliza lenguaje figurado?",["El tiempo vuela","El autobús tiene ruedas","La niña leyó un cuento","La ventana está cerrada"],0,"«El tiempo vuela» expresa que el tiempo parece pasar muy rápido."],
+["¿Qué significa «estar en las nubes»?",["Estar distraído","Estar bajo la lluvia","Viajar en avión","Mirar un mapa"],0,"La expresión indica que una persona está distraída o pensando en otra cosa."],
+["¿Qué es un mapa conceptual?",["Un esquema que conecta ideas","Una lista de números al azar","Una ilustración sin información","Una historia sin orden"],0,"El mapa conceptual organiza conceptos y muestra relaciones entre ellos."],
+["¿Qué debe hacerse primero para elaborar un esquema?",["Identificar las ideas principales","Copiar cada palabra","Escribir el final primero","Eliminar el tema"],0,"Reconocer las ideas principales ayuda a organizar la información."],
+["¿Cuál palabra contiene un prefijo?",["Deshacer","Casita","Florero","Zapatero"],0,"«Des-» se coloca antes de la raíz de «hacer»."],
+["¿Qué expresa el prefijo «re-» en «releer»?",["Volver a realizar la acción","Negación","Tamaño pequeño","Lugar"],0,"«Releer» significa leer nuevamente."],
+["¿Cuál palabra contiene un sufijo diminutivo?",["Arbolito","Desorden","Rehacer","Incapaz"],0,"El sufijo «-ito» puede indicar tamaño pequeño o afecto."],
+["¿Cuál es el sufijo de «panadería»?",["-ería","pan-","pa-","-na"],0,"«-ería» aparece al final y forma una palabra relacionada con un establecimiento."],
+["¿Qué significa «se me hizo agua la boca»?",["Sentir muchas ganas de comer algo","Tener sed de inmediato","Llorar por tristeza","Salir bajo la lluvia"],0,"La expresión figurada comunica deseo de probar una comida apetecible."],
+["¿Qué significa «costar un ojo de la cara»?",["Ser muy caro","Ser gratuito","Ser muy pequeño","Ser fácil de encontrar"],0,"La expresión popular indica que algo tiene un precio muy elevado."],
+["¿Para qué se usa una metáfora?",["Para expresar una idea mediante una relación figurada","Para escribir solo cantidades","Para enumerar páginas","Para separar párrafos"],0,"La metáfora relaciona una cosa con otra por semejanza o asociación."],
+["¿Cuál oración contiene una comparación explícita?",["Corre como el viento","El niño llegó temprano","La casa es grande","El perro duerme"],0,"La palabra «como» introduce una comparación entre la rapidez y el viento."],
+["¿Qué es una idea propia al interpretar una obra?",["Una conclusión personal basada en lo observado","Una frase copiada sin entender","Un dato sin relación","Una respuesta elegida al azar"],0,"Una interpretación personal debe apoyarse en elementos de la obra."],
+["¿Qué ayuda a comprender una obra artística?",["Observar detalles y considerar distintas interpretaciones","Ignorar todos los detalles","Leer solo el título","Copiar una opinión sin analizar"],0,"Los detalles observables y distintas perspectivas enriquecen la interpretación."],
+["¿Qué significa el prefijo «in-» en «injusto»?",["Negación o contrario","Repetición","Tamaño pequeño","Profesión"],0,"«Injusto» significa que algo no es justo."],
+["¿Qué palabra se forma con un sufijo?",["Amabilidad","Deshacer","Releer","Incapaz"],0,"«Amable» más «-idad» forma «amabilidad», un sustantivo." ]
+],
+match:[["Lenguaje popular","Expresión habitual de una comunidad."],["Lenguaje figurado","Expresión con sentido no literal."],["Prefijo","Parte añadida antes de una raíz."],["Sufijo","Parte añadida al final de una raíz."],["Mapa conceptual","Esquema que conecta ideas."]],
+written:[
+["Explica qué significa «estar en las nubes».","Estar distraído o pensando en otra cosa.","","Se espera una interpretación figurada, no una descripción literal."],
+["Escribe una expresión de lenguaje popular y explica su significado.","Ejemplo: «meter la pata» significa cometer un error.","","Debe incluir una expresión popular y su significado."],
+["Escribe una palabra con prefijo e identifica su prefijo.","Ejemplo: deshacer; el prefijo es des-.","","Comprueba que el prefijo esté antes de la raíz."],
+["Escribe una palabra con sufijo e identifica el sufijo.","Ejemplo: casita; el sufijo es -ita.","","Comprueba que el sufijo esté al final de la palabra."],
+["Explica para qué sirve un mapa conceptual.","Organiza ideas y muestra las relaciones entre los conceptos.","","Debe mencionar la organización de información o las conexiones entre ideas."]
+]},
+"Ciencias":{
+icon:"🧪",
+desc:"Sistema endocrino, glándulas, hormonas, equilibrio corporal y enfermedades endocrinas.",
+mc:[
+["¿Qué producen las glándulas endocrinas?",["Hormonas","Huesos","Dientes","Aire"],0,"Las glándulas endocrinas liberan hormonas que regulan funciones del cuerpo."],
+["¿Cuál es una glándula endocrina?",["Tiroides","Pulmón","Fémur","Vejiga"],0,"La tiroides es una glándula del sistema endocrino."],
+["¿Qué función cumplen las hormonas?",["Regular procesos del organismo","Transportar el aire","Formar únicamente uñas","Producir sonidos"],0,"Las hormonas actúan como mensajeros químicos del cuerpo."],
+["¿Dónde está la tiroides?",["En la parte anterior del cuello","En el tobillo","En la rodilla","En la palma de la mano"],0,"La tiroides se encuentra en la región anterior del cuello."],
+["¿Qué órgano produce insulina?",["Páncreas","Corazón","Pulmón","Estómago"],0,"El páncreas produce insulina, que ayuda a regular la glucosa sanguínea."],
+["¿Qué ayuda a regular la insulina?",["La glucosa en la sangre","El color de los ojos","La longitud del cabello","El tamaño de las uñas"],0,"La insulina facilita la regulación de la glucosa en la sangre."],
+["¿Qué glándulas producen adrenalina?",["Suprarrenales","Lagrimales","Salivales solamente","Sudoríparas"],0,"Las glándulas suprarrenales producen adrenalina."],
+["¿Qué función se relaciona con la hipófisis?",["Participar en la regulación de otras glándulas","Bombear la sangre","Filtrar el aire","Permitir la audición"],0,"La hipófisis produce hormonas que influyen en otras glándulas."],
+["¿Qué puede ocurrir si hay un desequilibrio hormonal?",["Se pueden alterar funciones corporales","El cuerpo no necesita agua","Todas las enfermedades desaparecen","Nunca ocurre ningún cambio"],0,"El equilibrio hormonal es importante para el funcionamiento del cuerpo."],
+["¿Cuál enfermedad se relaciona con la regulación de glucosa?",["Diabetes mellitus","Miopía","Caries únicamente","Esguince"],0,"La diabetes mellitus afecta la regulación de la glucosa sanguínea."],
+["¿Qué sistema participa en el crecimiento mediante hormonas?",["Sistema endocrino","Sistema óseo únicamente","Sistema respiratorio únicamente","Sistema tegumentario únicamente"],0,"Varias hormonas intervienen en el crecimiento y el desarrollo."],
+["¿Cuál es una práctica saludable?",["Mantener hábitos saludables y consultar a profesionales cuando sea necesario","Tomar hormonas sin indicación","Ignorar síntomas persistentes","Usar medicamentos ajenos"],0,"Los hábitos saludables y la orientación profesional ayudan a cuidar la salud."],
+["¿Qué relación tienen los sistemas nervioso y endocrino?",["Ambos coordinan funciones del organismo","No se relacionan con el cuerpo","Solo forman huesos","Solo digieren alimentos"],0,"Ambos sistemas ayudan a coordinar y regular procesos corporales."],
+["¿Qué glándula produce hormona del crecimiento?",["Hipófisis","Vesícula","Apéndice","Uréter"],0,"La hipófisis produce hormona del crecimiento."],
+["¿Qué es la homeostasis?",["La regulación de condiciones internas del organismo","El cambio del color de los ojos","La ausencia de necesidades corporales","La eliminación de todas las hormonas"],0,"La homeostasis mantiene condiciones internas adecuadas para el organismo."],
+["¿Cómo viajan muchas hormonas hasta las células donde actúan?",["Por la sangre","Por el cabello","Por las uñas","No se desplazan"],0,"Muchas hormonas circulan por la sangre hasta las células que responden a ellas."],
+["¿Quién debe evaluar una posible enfermedad endocrina?",["Un profesional de salud","Un compañero de clase","Cualquier persona sin formación","Nadie"],0,"El diagnóstico requiere evaluación profesional y, cuando corresponda, pruebas médicas."],
+["¿Qué órganos producen hormonas sexuales relacionadas con la pubertad?",["Ovarios y testículos","Pulmones y tráquea","Riñones solamente","Glándulas lagrimales"],0,"Los ovarios y los testículos producen hormonas que participan en la pubertad."],
+["¿Qué hacer ante síntomas persistentes?",["Hablar con un adulto responsable y consultar a personal de salud","Ignorarlos siempre","Tomar cualquier medicamento","Diagnosticarse sin ayuda"],0,"La evaluación profesional permite comprender los síntomas y orientar los cuidados."],
+["¿Por qué es importante el sistema endocrino?",["Regula el crecimiento, el metabolismo y otras funciones","Solo mueve los dedos","No influye en el organismo","Solo produce saliva"],0,"Las hormonas regulan muchas funciones esenciales del organismo."]
+],
+match:[["Tiroides","Produce hormonas relacionadas con el metabolismo."],["Páncreas","Produce insulina."],["Hipófisis","Participa en la regulación de otras glándulas."],["Suprarrenales","Producen adrenalina."],["Hormonas","Mensajeros químicos que regulan funciones."]],
+written:[
+["¿Qué es una hormona?","Es un mensajero químico que ayuda a regular funciones del organismo.","","Debe mencionar que es un mensajero químico regulador."],
+["Menciona dos glándulas del sistema endocrino.","Ejemplos: tiroides, hipófisis, páncreas, ovarios, testículos o suprarrenales.","","Se revisa que las dos glándulas sean correctas."],
+["Explica la relación entre el páncreas, la insulina y la glucosa.","El páncreas produce insulina, que ayuda a regular la glucosa sanguínea.","","Debe relacionar correctamente los tres elementos."],
+["Menciona una enfermedad relacionada con el sistema endocrino.","Ejemplo: la diabetes mellitus afecta la regulación de la glucosa.","","Se revisa manualmente la enfermedad mencionada."],
+["¿Por qué es importante consultar a profesionales ante síntomas persistentes?","Porque pueden evaluar los síntomas y orientar los cuidados o el tratamiento.","","Debe indicar la importancia de la evaluación profesional."]
+]},
+"Matemáticas":{
+icon:"📐",
+desc:"Medidas de longitud, masa, tiempo, superficie y capacidad; patrones; perímetros, áreas y circunferencias.",
+mc:[
+["Un cuadrado tiene lados de 6 cm. ¿Cuál es su perímetro?",["12 cm","24 cm","36 cm²","18 cm"],1,"Perímetro = 4 × lado = 4 × 6 = 24 cm."],
+["Un rectángulo mide 8 cm por 3 cm. ¿Cuál es su área?",["11 cm²","22 cm²","24 cm²","48 cm²"],2,"Área = largo × ancho = 8 × 3 = 24 cm²."],
+["¿Cuál es el área de un cuadrado de lado 5 m?",["10 m²","20 m²","25 m²","15 m²"],2,"Área = lado × lado = 5 × 5 = 25 m²."],
+["¿Cómo se calcula el perímetro de un rectángulo?",["Sumando sus cuatro lados","Multiplicando largo por ancho","Dividiendo entre dos","Sumando solo dos lados"],0,"El perímetro es la suma de todos los lados: 2 × (largo + ancho)."],
+["¿Qué es el radio de una circunferencia?",["La distancia del centro al borde","La línea que mide dos radios","Toda la superficie interior","El borde completo"],0,"El radio va desde el centro hasta un punto de la circunferencia."],
+["¿Qué es el diámetro?",["Un segmento que pasa por el centro y une dos puntos del borde","La mitad del radio","El área del círculo","La longitud de un arco"],0,"El diámetro pasa por el centro y mide dos radios."],
+["Si el radio mide 4 cm, ¿cuánto mide el diámetro?",["2 cm","4 cm","8 cm","16 cm"],2,"Diámetro = 2 × radio = 8 cm."],
+["Si el diámetro mide 10 cm, ¿cuánto mide el radio?",["5 cm","10 cm","20 cm","2 cm"],0,"El radio es la mitad del diámetro: 10 ÷ 2 = 5 cm."],
+["¿Qué valor aproximado de π se usa en este examen?",["2,14","3,14","4,13","3,41"],1,"Para los cálculos se utiliza π ≈ 3,14."],
+["¿Qué fórmula calcula la longitud de una circunferencia usando el diámetro?",["L = π × d","L = lado × lado","L = d ÷ 2","L = largo × ancho"],0,"La longitud de la circunferencia es π multiplicado por el diámetro."],
+["Una circunferencia tiene diámetro de 5 cm. ¿Cuál es su longitud?",["8,14 cm","15,7 cm","10 cm","25 cm"],1,"L = 3,14 × 5 = 15,7 cm."],
+["Un círculo tiene radio de 3 cm. ¿Cuál es su longitud aproximada?",["9,42 cm","18,84 cm","28,26 cm","6,28 cm"],1,"L = 2 × π × r = 2 × 3,14 × 3 = 18,84 cm."],
+["¿Cuál es el área de un rectángulo de 7 cm por 4 cm?",["11 cm²","22 cm²","28 cm²","14 cm²"],2,"Área = 7 × 4 = 28 cm²."],
+["Un triángulo tiene base de 10 cm y altura de 6 cm. ¿Cuál es su área?",["60 cm²","30 cm²","16 cm²","32 cm²"],1,"Área = base × altura ÷ 2 = 30 cm²."],
+["Un triángulo tiene lados de 5, 6 y 7 cm. ¿Cuál es su perímetro?",["18 cm","30 cm²","13 cm","17 cm"],0,"Perímetro = 5 + 6 + 7 = 18 cm."],
+["Si se duplica el diámetro, ¿qué ocurre con la longitud de la circunferencia?",["También se duplica","Se reduce a la mitad","No cambia","Se cuadruplica"],0,"La longitud es proporcional al diámetro: L = π × d."],
+["La longitud de una circunferencia es 31,4 cm. ¿Cuál es su diámetro?",["5 cm","10 cm","15,7 cm","20 cm"],1,"d = 31,4 ÷ 3,14 = 10 cm."],
+["¿Qué unidad se usa para expresar el área de una mesa?",["Centímetros cuadrados","Centímetros solamente","Litros","Kilogramos"],0,"El área mide superficies y se expresa en unidades cuadradas."],
+["¿Cuál afirmación diferencia círculo y circunferencia?",["La circunferencia es el borde; el círculo es la región interior","Son un rectángulo","El círculo es solo el centro","La circunferencia tiene esquinas"],0,"La circunferencia es la línea exterior; el círculo incluye la región interior."],
+["Una rueda tiene diámetro de 20 cm. ¿Qué distancia recorre en una vuelta?",["31,4 cm","62,8 cm","40 cm","125,6 cm"],1,"Una vuelta mide la circunferencia: 3,14 × 20 = 62,8 cm."]
+],
+match:[["Radio","Del centro hasta la circunferencia."],["Diámetro","Pasa por el centro y mide dos radios."],["π","Valor aproximado 3,14."],["Perímetro","Suma de las longitudes de los lados."],["Área","Medida de una superficie."]],
+written:[
+["Calcula el perímetro de un cuadrado de lado 9 cm.","36 cm.","36","4 × 9 = 36 cm."],
+["Calcula el área de un rectángulo de 12 m por 5 m.","60 m².","60","Área = 12 × 5 = 60 m²."],
+["Calcula la longitud de una circunferencia con diámetro 8 cm y π = 3,14.","25,12 cm.","25,12|25.12","L = 3,14 × 8 = 25,12 cm."],
+["Si el radio mide 7 cm, ¿cuánto mide el diámetro?","14 cm.","14","Diámetro = 2 × 7 = 14 cm."],
+["Explica la relación entre la longitud de una circunferencia y su diámetro.","La longitud es aproximadamente 3,14 veces el diámetro: L = π × d.","","Debe indicar la fórmula o la relación aproximada de 3,14."]
+]},
+"Estudios Sociales":{
+icon:"🇨🇷",
+desc:"Campaña Nacional contra los filibusteros, liberalismo y consolidación del Estado-nación costarricense.",
+mc:[
+["¿En qué años ocurrió la Campaña Nacional contra los filibusteros?",["1856–1857","1948–1949","1821–1822","1899–1900"],0,"La Campaña Nacional se asocia principalmente con los años 1856 y 1857."],
+["¿Quién fue Juan Santamaría?",["Un héroe recordado por su participación en la batalla de Rivas","El primer presidente de Costa Rica","Un dirigente filibustero","Un presidente del siglo XXI"],0,"Juan Santamaría es recordado por su participación en la batalla de Rivas."],
+["¿Quién dirigió fuerzas filibusteras en Nicaragua?",["William Walker","Juan Rafael Mora Porras","Juan Santamaría","Tomás Guardia"],0,"William Walker fue el dirigente filibustero que intentó establecer su dominio en la región."],
+["¿Quién era Juan Rafael Mora Porras durante la Campaña Nacional?",["Presidente de Costa Rica","Jefe de los filibusteros","Un científico del siglo XX","Un gobernador colonial español"],0,"Juan Rafael Mora Porras era presidente de Costa Rica durante la Campaña Nacional."],
+["¿Qué buscaban los filibusteros de William Walker?",["Expandir su poder e influencia en Centroamérica","Proteger la independencia sin intervenir","Construir escuelas costarricenses únicamente","Eliminar toda presencia militar"],0,"Walker y sus seguidores intentaron establecer dominio político y militar en la región."],
+["¿Qué característica se asocia al liberalismo costarricense de finales del siglo XIX?",["Impulso a la educación pública y reformas estatales","Restauración del dominio colonial español","Rechazo de toda institución pública","Eliminación de toda actividad económica"],0,"Los gobiernos liberales impulsaron reformas educativas, administrativas y de modernización."],
+["¿Qué buscaban las reformas liberales en educación?",["Ampliar la educación pública","Prohibir que la gente aprendiera a leer","Cerrar todas las escuelas","Sustituir escuelas por cuarteles"],0,"La educación pública fue importante en el proyecto liberal de modernización."],
+["¿Qué significa consolidar el Estado-nación?",["Fortalecer instituciones e identidad nacional","Eliminar todas las instituciones","Dividir el país en colonias extranjeras","Dejar de reconocer una identidad común"],0,"La consolidación del Estado-nación implica instituciones y referencias nacionales compartidas."],
+["¿Quién era presidente durante la Campaña Nacional de 1856?",["Juan Rafael Mora Porras","José Figueres Ferrer","Óscar Arias Sánchez","Francisco Morazán"],0,"Juan Rafael Mora Porras era presidente durante la Campaña Nacional."],
+["¿Qué importancia tuvo la resistencia contra los filibusteros?",["Ayudó a defender la soberanía centroamericana","Estableció una colonia de Walker en Costa Rica","Eliminó todas las instituciones","Acabó con la independencia centroamericana"],0,"La resistencia contribuyó a frenar el proyecto filibustero y defender la soberanía."],
+["¿Qué contribuyó a fortalecer la identidad nacional?",["La promoción de símbolos, educación e historia compartida","La eliminación de los símbolos patrios","La prohibición de la educación cívica","El rechazo de la historia nacional"],0,"Los símbolos y la educación contribuyeron a formar una identidad nacional."],
+["¿Qué papel tuvo el Estado liberal a finales del siglo XIX?",["Modernizar instituciones y promover reformas","Desaparecer por completo el gobierno","Devolver el país al dominio colonial","Prohibir las obras públicas"],0,"Los gobiernos liberales impulsaron reformas e infraestructura."],
+["¿Qué transporte fue importante para el comercio costarricense del siglo XIX?",["El ferrocarril","Los aviones a reacción","Los teléfonos inteligentes","Los automóviles eléctricos modernos"],0,"El ferrocarril facilitó el transporte y el comercio de productos."],
+["¿Por qué fue importante el café en Costa Rica durante el siglo XIX?",["Se convirtió en un producto importante de exportación","No se cultivó en el país","Fue siempre la moneda oficial","Sustituyó toda actividad agrícola"],0,"La expansión cafetalera influyó en la economía y el comercio nacional."],
+["¿Qué describe mejor a un filibustero en este contexto histórico?",["Un aventurero armado que intervenía en territorios extranjeros","Un maestro rural","Un médico de hospital","Un agricultor sin participación política"],0,"Los filibusteros eran grupos armados que intentaron controlar territorios centroamericanos."],
+["¿Cómo se estudia responsablemente la Campaña Nacional?",["Analizando sus causas, protagonistas y consecuencias","Repitiendo nombres sin contexto","Afirmando que no tuvo consecuencias","Confundiéndola con hechos actuales"],0,"El contexto ayuda a comprender la importancia histórica del proceso."],
+["¿Qué aspecto del liberalismo se relacionó con la modernización?",["Desarrollo de infraestructura e instituciones públicas","Prohibición de obras públicas","Eliminación de la administración estatal","Cierre de rutas comerciales"],0,"La modernización incluyó cambios en infraestructura y organización estatal."],
+["¿Qué significa soberanía nacional?",["La capacidad de un país para gobernarse sin dominio extranjero","Obedecer siempre a un ejército invasor","La propiedad de una escuela","No tener instituciones"],0,"La soberanía implica independencia y autoridad propia del país."],
+["¿Cómo se fortaleció el Estado-nación costarricense?",["Mediante instituciones, educación y símbolos nacionales","En un día, sin cambios posteriores","Sin ninguna relación con la educación","Por la conquista de William Walker"],0,"La construcción del Estado-nación fue un proceso gradual."],
+["¿Por qué se estudian la Campaña Nacional y el liberalismo?",["Para comprender la soberanía y la formación del Estado","Para mezclar hechos sin orden","Para sustituir la historia por opiniones","Para afirmar que la historia no cambia"],0,"Estos temas ayudan a comprender la defensa de la soberanía y la formación institucional."]
+],
+match:[["Juan Rafael Mora Porras","Presidente durante la Campaña Nacional."],["Juan Santamaría","Héroe asociado a la batalla de Rivas."],["William Walker","Dirigente filibustero en Nicaragua."],["Liberalismo del siglo XIX","Reformas estatales, educación y modernización."],["Estado-nación","Instituciones e identidad nacional compartida."]],
+written:[
+["Explica por qué fue importante la Campaña Nacional de 1856–1857.","Contribuyó a defender la soberanía costarricense frente al proyecto filibustero.","","La idea principal es la defensa de la soberanía."],
+["Menciona dos figuras de la Campaña Nacional y explica el papel de cada una.","Por ejemplo, Juan Rafael Mora Porras fue presidente y Juan Santamaría es recordado por su participación en la batalla de Rivas.","","Se revisa que las figuras y sus papeles sean correctos."],
+["Escribe dos características del liberalismo costarricense de finales del siglo XIX.","Por ejemplo, reformas educativas, modernización estatal e infraestructura.","","Se aceptan dos características históricamente pertinentes."],
+["¿Cómo ayudó la educación a consolidar el Estado-nación costarricense?","Ayudó a formar ciudadanía y fortalecer una identidad nacional compartida.","","Debe relacionar educación, ciudadanía o identidad nacional."],
+["Explica qué significa soberanía nacional.","Es la capacidad de un país para gobernarse y tomar decisiones sin dominio extranjero.","","Debe expresar autonomía y ausencia de dominio extranjero."]
+]}
+};
+
+const state={subject:null,page:0,answers:{},matches:{},written:{}};
+const $=id=>document.getElementById(id);
+const screens=["home","instructions","exam","results"];
+function show(id){screens.forEach(s=>$(s).classList.toggle("hidden",s!==id));window.scrollTo(0,0);}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function init(){
+$("subjects").innerHTML=Object.entries(bank).map(([name,b])=>`<button class="subject" data-subject="${esc(name)}"><span>${b.icon}</span>${esc(name)}<small>${esc(b.desc)}</small></button>`).join("");
+document.querySelectorAll("[data-subject]").forEach(btn=>btn.onclick=()=>{
+state.subject=btn.dataset.subject;
+document.querySelectorAll("[data-subject]").forEach(x=>x.classList.toggle("selected",x===btn));
+$("selectedLabel").textContent="Seleccionada: "+state.subject;$("nextHome").disabled=false;
+});
+}
+$("nextHome").onclick=()=>{
+$("instructionTitle").textContent="Examen de "+state.subject;
+show("instructions");
+};
+$("backHome").onclick=()=>show("home");
+$("start").onclick=()=>{
+state.page=0;state.answers={};state.matches={};state.written={};
+renderPage();show("exam");
+};
+function info(){
+if(state.page===0)return {title:"Parte I: Selección única",desc:"Lea cuidadosamente cada pregunta y marque con una X la opción correcta. Seleccione solamente una respuesta.",start:1,end:20};
+if(state.page===1)return {title:"Parte II: Relacionar",desc:"Una cada elemento de la columna izquierda con la respuesta correcta de la columna derecha.",start:21,end:25};
+return {title:"Parte III: Respuesta escrita",desc:"Lea cada pregunta y escriba su respuesta de forma clara y completa.",start:26,end:30};
+}
+function renderPage(){
+const b=bank[state.subject],p=info();
+$("partLabel").textContent=state.subject+" · Página "+(state.page+1)+" de 3";
+$("partTitle").textContent=p.title;$("partInstructions").textContent=p.desc;
+$("pageLabel").textContent=`Preguntas ${p.start}–${p.end} de 30`;
+$("progressBar").style.width=((state.page+1)/3*100)+"%";
+$("previous").disabled=state.page===0;
+$("next").textContent=state.page===2?"Finalizar examen":"Siguiente →";
+if(state.page===0){
+$("questions").innerHTML=b.mc.map((q,i)=>`<div class="question"><h3>${i+1}. ${esc(q[0])}</h3>${q[1].map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}" ${state.answers[i]===j?"checked":""}><span><b>${"ABCD"[j]}.</b> ${esc(o)}</span></label>`).join("")}</div>`).join("");
+$("questions").querySelectorAll("input").forEach(x=>x.onchange=()=>state.answers[+x.name.slice(1)]=+x.value);
+}else if(state.page===1){
+const choices=b.match.map((x,i)=>({text:x[1],id:i})).sort((a,b)=>a.text.localeCompare(b.text,"es"));
+$("questions").innerHTML=b.match.map((m,i)=>`<div class="matchrow"><b>${i+21}. ${esc(m[0])}</b><select data-m="${i}"><option value="">Selecciona una definición…</option>${choices.map(c=>`<option value="${c.id}" ${state.matches[i]===c.id?"selected":""}>${esc(c.text)}</option>`).join("")}</select></div>`).join("");
+$("questions").querySelectorAll("[data-m]").forEach(x=>x.onchange=()=>state.matches[+x.dataset.m]=x.value===""?null:+x.value);
+}else{
+$("questions").innerHTML=b.written.map((q,i)=>`<div class="question"><h3>${i+26}. ${esc(q[0])}</h3><textarea data-w="${i}" placeholder="Escribe tu respuesta…">${esc(state.written[i]||"")}</textarea></div>`).join("");
+$("questions").querySelectorAll("[data-w]").forEach(x=>x.oninput=()=>state.written[+x.dataset.w]=x.value);
+}
+}
+$("previous").onclick=()=>{if(state.page>0){state.page--;renderPage();}};
+$("next").onclick=()=>{
+if(state.page<2){state.page++;renderPage();window.scrollTo(0,0);}
+else finish();
+};
+function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[.,;:!?¿¡()[\]{}]/g," ").replace(/\s+/g," ").trim();}
+function finish(){
+const b=bank[state.subject];
+let blank=0;
+b.mc.forEach((q,i)=>{if(state.answers[i]===undefined)blank++;});
+b.match.forEach((q,i)=>{if(state.matches[i]===undefined||state.matches[i]===null)blank++;});
+b.written.forEach((q,i)=>{if(!String(state.written[i]||"").trim())blank++;});
+if(blank&&!confirm(`Tienes ${blank} pregunta(s) sin responder. ¿Finalizar de todas formas?`))return;
+showResults();show("results");
+}
+function showResults(){
+const b=bank[state.subject];let correct=0,wrong=0,omitted=0,pending=0,items=[];
+function add(num,q,student,expected,explanation,status){
+if(status==="correct")correct++;else if(status==="wrong")wrong++;else if(status==="omitted")omitted++;else pending++;
+if(status!=="correct")items.push({num,q,student,expected,explanation,status});
+}
+b.mc.forEach((q,i)=>{
+const a=state.answers[i],s=a===undefined?"omitted":a===q[2]?"correct":"wrong";
+add(i+1,q[0],a===undefined?"Sin respuesta":`${"ABCD"[a]}. ${q[1][a]}`,`${"ABCD"[q[2]]}. ${q[1][q[2]]}`,q[3],s);
+});
+b.match.forEach((q,i)=>{
+const a=state.matches[i],s=a===undefined||a===null?"omitted":a===i?"correct":"wrong";
+add(i+21,q[0],a===undefined||a===null?"Sin respuesta":b.match[a][1],q[1],"Relaciona el concepto con su definición. Lee ambas columnas para recordar la relación.",s);
+});
+b.written.forEach((q,i)=>{
+const ans=String(state.written[i]||"").trim(),n=norm(ans),expected=norm(q[1]);
+let s=!ans?"omitted":(n===expected||(q[2]||"").split("|").map(norm).includes(n))?"correct":"pending";
+add(i+26,q[0],ans||"Sin respuesta",q[1],q[3],s);
+});
+const graded=30-pending,percent=graded?Math.round(correct/graded*100):0;
+$("scoreArea").innerHTML=`<div class="score">${correct}/30</div><p>Respuestas correctas calificadas automáticamente.</p><div class="stats"><div class="stat">Correctas<b>${correct}</b></div><div class="stat">Incorrectas<b>${wrong}</b></div><div class="stat">Omitidas<b>${omitted}</b></div><div class="stat">Por revisar<b>${pending}</b></div></div><h3>${percent}% de aciertos entre respuestas calificadas automáticamente</h3><p class="muted">Las respuestas abiertas que no se pueden evaluar con seguridad quedan pendientes de revisión, en lugar de marcarse automáticamente como incorrectas.</p>`;
+$("review").innerHTML="<h3>Revisión de errores y respuestas pendientes</h3>"+(items.length?items.map(r=>`<div class="review ${r.status==="pending"?"pending":""}"><b>Pregunta ${r.num}: ${esc(r.q)}</b><p><b>Tu respuesta:</b> ${esc(r.student)}</p><p><b>Respuesta esperada:</b> ${esc(r.expected)}</p><p><b>Explicación:</b> ${esc(r.explanation)}</p><p><b>Estado:</b> ${r.status==="pending"?"Pendiente de revisión":r.status==="omitted"?"Omitida":"Incorrecta"}</p></div>`).join(""):"<p>¡Excelente! No hay respuestas incorrectas u omitidas.</p>");
+}
+$("retry").onclick=()=>{$("start").click();};
+$("change").onclick=()=>{state.subject=null;init();$("selectedLabel").textContent="Ninguna materia seleccionada";$("nextHome").disabled=true;show("home");};
+init();
+</script>
+</body>
+</html>
