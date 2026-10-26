@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Práctica de aplicación digital — Examen escolar</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#65718a;--line:#dce4ef;--primary:#405cf5;--primary2:#2e45d0;--soft:#edf0ff;--good:#16845b;--bad:#c43e4d;--warn:#9b6500;--shadow:0 12px 32px #24365b12}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#e7ecff 0,transparent 30%),var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 18px;font-weight:700;transition:.15s}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #8b9aff;outline-offset:2px}.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary2)}.btn-light{background:#eef1f7;color:#26334b}.btn-outline{background:white;color:var(--primary);border:1px solid #cbd3ff}.btn-danger{background:#fff0f1;color:#a52837}.wrap{width:min(1050px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}.top{display:flex;align-items:center;gap:12px;margin-bottom:24px}.logo{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--primary);color:white;font-size:24px;box-shadow:var(--shadow)}.top h1{font-size:clamp(20px,4vw,28px);margin:0}.top p{margin:2px 0 0;color:var(--muted);font-size:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,32px);box-shadow:var(--shadow)}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--primary);font-weight:800}.intro h2,.panel h2{font-size:clamp(24px,4vw,34px);line-height:1.2;margin:8px 0 10px}.sub{color:var(--muted);max-width:720px}.subjects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}.subject{background:#fff;border:2px solid var(--line);border-radius:18px;padding:20px;text-align:left;color:var(--ink);min-height:142px}.subject:hover{border-color:#aeb8ff;transform:translateY(-2px)}.subject.selected{border-color:var(--primary);background:var(--soft);box-shadow:0 0 0 3px #405cf51c}.subject .emoji{font-size:28px}.subject strong{display:block;font-size:18px;margin:8px 0 3px}.subject small{color:var(--muted)}.row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.note{background:#fff8e8;border:1px solid #f2dfa9;color:#72500c;padding:13px 15px;border-radius:13px;font-size:14px;margin:18px 0}.hidden{display:none!important}.pill{display:inline-flex;align-items:center;border-radius:999px;background:var(--soft);color:var(--primary);font-size:12px;font-weight:800;padding:5px 10px}.progress{height:8px;background:#e7ebf3;border-radius:99px;overflow:hidden;margin:14px 0 8px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--primary),#8290ff);transition:width .2s}.muted{color:var(--muted);font-size:14px}.instructions{background:#f7f8ff;border:1px solid #e1e5ff;border-radius:15px;padding:16px;margin:16px 0}.question{padding:20px 0;border-bottom:1px solid var(--line)}.question:last-child{border-bottom:0}.qhead{display:flex;gap:12px;align-items:flex-start}.qnum{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--soft);color:var(--primary);font-weight:800}.qtitle{font-weight:750;margin:2px 0 8px}.context{color:#4c5a73;background:#f8fafc;border-left:3px solid #b9c4ff;padding:10px 12px;margin:8px 0 12px;border-radius:0 10px 10px 0}.options{display:grid;gap:8px;margin:12px 0 0}.option{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:white;cursor:pointer}.option:has(input:checked){border-color:var(--primary);background:var(--soft)}.option input{margin-top:5px;accent-color:var(--primary)}textarea,.written{width:100%;border:1px solid #cfd8e6;border-radius:12px;padding:12px;background:white;color:var(--ink)}textarea{resize:vertical;min-height:86px}.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.match-col{border:1px solid var(--line);border-radius:14px;padding:12px}.match-col h4{margin:0 0 10px}.match-item{display:grid;grid-template-columns:1fr;gap:7px;padding:9px 0;border-bottom:1px solid #edf0f5}.match-item:last-child{border:0}.match-item label{font-size:14px;font-weight:650}.match-item select{width:100%;padding:9px;border:1px solid #cfd8e6;border-radius:9px;background:white}.nav{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:24px;flex-wrap:wrap}.nav .right{display:flex;gap:10px}.result-hero{display:grid;grid-template-columns:160px 1fr;gap:22px;align-items:center}.score-circle{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--primary) var(--pct,0%),#e8ecf5 0);position:relative}.score-circle:before{content:"";position:absolute;inset:10px;border-radius:50%;background:white}.score-circle div{z-index:1;text-align:center}.score-circle strong{display:block;font-size:30px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.stat{border:1px solid var(--line);border-radius:14px;padding:14px}.stat strong{display:block;font-size:24px}.review{border:1px solid var(--line);border-radius:15px;margin:12px 0;overflow:hidden}.review summary{cursor:pointer;padding:15px;font-weight:750;background:#fafbfe}.review-body{padding:15px;border-top:1px solid var(--line)}.status{font-size:12px;font-weight:800;padding:4px 8px;border-radius:99px;display:inline-block}.correct{background:#e4f7ed;color:#116b49}.incorrect{background:#ffebed;color:#a52837}.pending{background:#fff4d9;color:#805300}.answer-line{margin:8px 0}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+@media(max-width:650px){.subjects{grid-template-columns:1fr}.match-grid{grid-template-columns:1fr}.result-hero{grid-template-columns:1fr;text-align:center}.score-circle{margin:auto}.stats{grid-template-columns:repeat(2,1fr)}.nav{align-items:stretch}.nav button{flex:1}.nav .right{display:flex;flex:1}.nav .right button{flex:1}.wrap{width:min(100% - 18px,1050px);padding-top:16px}.panel{border-radius:17px}}
+@media print{body{background:white}.top,.nav,button{display:none!important}.panel{box-shadow:none;border:0}.wrap{width:100%;padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="logo">✦</div><div><h1>Práctica de aplicación digital</h1><p>Examen escolar · práctica y revisión de aprendizajes</p></div></header>
+<main>
+<section id="home" class="panel intro">
+<div class="eyebrow">Bienvenido/a</div><h2>¿Qué materia vas a practicar?</h2><p class="sub">Selecciona una materia para abrir una prueba organizada por partes, como un examen escolar. Tus respuestas se conservarán mientras avanzas y retrocedes.</p>
+<div class="subjects">
+<button class="subject" data-subject="Español"><span class="emoji">📚</span><strong>Español</strong><small>Lenguaje popular y figurado</small></button>
+<button class="subject" data-subject="Ciencias"><span class="emoji">⚡</span><strong>Ciencias</strong><small>Energía, tecnología y ambiente</small></button>
+<button class="subject" data-subject="Matemáticas"><span class="emoji">📐</span><strong>Matemáticas</strong><small>Medidas, sucesiones y patrones</small></button>
+<button class="subject" data-subject="Estudios Sociales"><span class="emoji">🇨🇷</span><strong>Estudios Sociales</strong><small>Garantías sociales, familiares y ambientales</small></button>
+</div>
+<div class="note">La prueba utiliza únicamente los temas que compartiste. Algunas preguntas escritas se marcarán como «pendientes de revisión» si no es posible comprobar automáticamente que una respuesta libre sea correcta.</div>
+<div class="row"><span id="selectedLabel" class="muted">Primero, selecciona una materia.</span><button id="startBtn" class="btn-primary" disabled>Siguiente →</button></div>
+</section>
+<section id="directions" class="panel hidden">
+<div class="eyebrow">Antes de comenzar</div><h2 id="directionTitle">Instrucciones del examen</h2><p id="directionSub" class="sub"></p>
+<div class="instructions"><strong>Parte I · Selección única</strong><p>Lea cuidadosamente cada pregunta y marque con una X la opción que considere correcta. Seleccione solamente una respuesta.</p><strong>Parte II · Relacionar</strong><p>Una cada elemento de la columna izquierda con la respuesta correcta de la columna derecha usando los menús desplegables.</p><strong>Parte III · Respuesta escrita</strong><p>Lea cada pregunta y escriba su respuesta de forma clara y completa. Las respuestas dudosas quedarán pendientes de revisión.</p></div>
+<ul><li>La prueba contiene 30 preguntas y vale 30 puntos.</li><li>Puede regresar a páginas anteriores sin perder las respuestas.</li><li>Al finalizar, se mostrarán los resultados y las explicaciones.</li></ul>
+<div class="note" id="coverageNote"></div>
+<div class="nav"><button class="btn-light" id="backHome">← Cambiar materia</button><button class="btn-primary" id="beginExam">Comenzar examen →</button></div>
+</section>
+<section id="exam" class="panel hidden">
+<div class="row"><div><span class="pill" id="partPill">Parte I</span><h2 id="examTitle" style="margin:8px 0 0">Selección única</h2></div><span class="muted" id="pageLabel">Página 1 de 3</span></div>
+<div class="progress"><div id="progressFill"></div></div><div class="muted" id="progressLabel">Pregunta 1 de 30</div>
+<div class="instructions" id="partInstruction"></div>
+<div id="questionArea"></div>
+<div class="nav"><button class="btn-light" id="prevBtn">← Anterior</button><div class="right"><button class="btn-light" id="nextBtn">Siguiente →</button><button class="btn-primary hidden" id="finishBtn">Finalizar examen</button></div></div>
+</section>
+<section id="results" class="panel hidden">
+<div class="eyebrow">Prueba completada</div><h2>Resultados del examen</h2><p class="sub" id="resultSubject"></p>
+<div class="result-hero"><div class="score-circle" id="scoreCircle"><div><strong id="scoreText">0/30</strong><span class="muted">puntos</span></div></div><div><h2 id="resultHeading" style="font-size:25px;margin:0 0 8px">¡Buen trabajo!</h2><p id="resultSummary" class="sub"></p><span class="pill" id="percentPill">0 % de aciertos</span></div></div>
+<div class="stats"><div class="stat"><span class="muted">Correctas</span><strong id="correctStat">0</strong></div><div class="stat"><span class="muted">Incorrectas</span><strong id="wrongStat">0</strong></div><div class="stat"><span class="muted">Omitidas</span><strong id="omittedStat">0</strong></div><div class="stat"><span class="muted">Pendientes</span><strong id="pendingStat">0</strong></div></div>
+<h3>Revisión de respuestas</h3><p class="muted">Abre cada pregunta para ver tu respuesta, la respuesta esperada y una explicación. Las respuestas escritas que necesitan criterio humano no se cuentan como incorrectas.</p><div id="reviewArea"></div>
+<div class="nav"><button id="newExam" class="btn-light">Volver al inicio</button><button id="retryBtn" class="btn-primary">Practicar esta materia otra vez ↻</button></div>
+</section>
+</main><div class="footer">Funciona sin conexión · No envía ni comparte tus respuestas</div>
+</div>
+<script>
+const banks = {
+"Español":{
+desc:"Lenguaje popular, expresiones figuradas, significado y función dentro de distintos textos.",
+topics:"Lenguaje popular y lenguaje figurado: identificación, interpretación y función en textos literarios y cotidianos.",
+mc:[
+["¿Cuál opción es un refrán popular?","A caballo regalado no se le mira el diente.","El caballo corre por el campo.","El animal tiene cuatro patas.","Compraron alimento para el caballo.",0,"Los refranes son expresiones populares que transmiten una enseñanza."],
+["En «Estoy muerto de sueño», la expresión significa que la persona…","está en peligro.","tiene muchísimo sueño.","ha fallecido.","está soñando despierta.",1,"Es una exageración figurada para expresar mucho cansancio."],
+["¿Cuál expresión pertenece al lenguaje popular?","La fotosíntesis produce glucosa.","Más vale tarde que nunca.","El agua hierve a cierta temperatura.","El triángulo tiene tres lados.",1,"Es un dicho usado en la comunicación cotidiana."],
+["«Tiene un corazón de oro» quiere decir que alguien es…","rico en metales.","muy amable y generoso.","un personaje fantástico.","frío y distante.",1,"El oro representa figuradamente la bondad y el valor de la persona."],
+["¿Cuál frase utiliza lenguaje figurado?","La niña abrió la ventana.","El libro tiene cien páginas.","Las nubes lloraban sobre el pueblo.","La mesa es de madera.",2,"Se atribuye a las nubes la acción humana de llorar; representa la lluvia."],
+["¿Qué expresa «se me hizo agua la boca»?","Que empezó a llover.","Que algo le pareció muy apetitoso.","Que bebió un vaso de agua.","Que tenía miedo.",1,"La frase indica que la comida provoca muchas ganas de comer."],
+["¿Cuál es un ejemplo de comparación figurada?","El sol es una estrella.","Corre como el viento.","El viento mueve las hojas.","Hoy es martes.",1,"La palabra «como» compara la rapidez con la del viento."],
+["En «Pedro está en las nubes», probablemente significa que Pedro…","está en un avión.","está distraído o pensando en otra cosa.","subió a una montaña.","mira el pronóstico del tiempo.",1,"La expresión se usa para indicar distracción."],
+["¿Cuál expresión comunica una enseñanza?","¡Qué bonito día!","El perro ladra.","No dejes para mañana lo que puedes hacer hoy.","La puerta es azul.",2,"El refrán recomienda no aplazar las tareas."],
+["«La noticia corrió como pólvora» significa que…","la noticia se quemó.","se difundió muy rápidamente.","nadie la escuchó.","la noticia era falsa.",1,"La comparación indica que la noticia se propagó con rapidez."],
+["¿Cuál frase tiene sentido literal?","Me partió el corazón.","Estoy que echo humo.","La mochila pesa tres kilos.","Tiene una memoria de elefante.",2,"Indica una medida real de peso, sin expresión figurada."],
+["¿Para qué se usan expresiones figuradas en un cuento?","Para hacer el texto más expresivo e imaginativo.","Para eliminar todos los personajes.","Para convertirlo en una lista de números.","Para evitar que tenga significado.",0,"Las expresiones figuradas enriquecen imágenes, emociones y significados."],
+["«Está lloviendo a cántaros» quiere decir que…","llueve muy poco.","llueve intensamente.","se rompieron varios cántaros.","el cielo está despejado.",1,"Es una expresión popular que indica lluvia abundante."],
+["¿Cuál expresión es una personificación?","La casa tiene dos ventanas.","El río canta entre las piedras.","El río mide varios kilómetros.","El agua está fría.",1,"Se atribuye al río la acción humana de cantar."],
+["En «su voz era música para mis oídos», la expresión comunica…","que la persona cantaba necesariamente.","que escucharla resultaba agradable.","que había instrumentos cerca.","que no podía oír.",1,"La música representa algo placentero al escuchar."],
+["¿Qué significa «poner las cartas sobre la mesa»?","Jugar a las cartas.","Hablar con sinceridad y aclarar la situación.","Esconder información.","Ordenar una mesa.",1,"La expresión significa mostrar claramente las intenciones o los hechos."],
+["¿Cuál es lenguaje popular de uso cotidiano?","El paciente presenta síntomas.","¡Qué torta hice!","El resultado es equivalente.","La materia cambia de estado.",1,"En Costa Rica, «hacer una torta» puede expresar cometer un error."],
+["¿Qué función tiene un refrán en un diálogo?","Dar una enseñanza o consejo.","Indicar siempre una fecha exacta.","Describir una fórmula científica.","Nombrar un lugar geográfico.",0,"Los refranes suelen resumir consejos o experiencias populares."],
+["«Tiene los pies en la tierra» describe a una persona…","que camina descalza.","realista y sensata.","que vive en el campo.","que no sabe caminar.",1,"La expresión indica que alguien es práctico y realista."],
+["¿Qué debe hacerse para interpretar una expresión figurada?","Entenderla siempre palabra por palabra.","Considerar el contexto y el sentido que transmite.","Ignorar las otras oraciones.","Buscar solo nombres propios.",1,"El contexto permite descubrir el sentido no literal."]
+],
+match:[
+["Más vale tarde que nunca","Conviene hacer algo aunque sea después de lo previsto."],
+["Estar en las nubes","Estar distraído."],
+["Corazón de oro","Persona bondadosa."],
+["Llover a cántaros","Llover mucho."],
+["Ponerse las pilas","Esforzarse y actuar con energía."]
+],
+written:[
+["Explica con tus palabras qué significa «no hay mal que por bien no venga».","Una situación mala puede traer algo bueno o una enseñanza.","no hay mal que por bien no venga|algo bueno puede salir de algo malo|de algo malo puede salir algo bueno|una dificultad puede traer algo positivo", "Se busca la idea de que una dificultad puede producir una consecuencia positiva."],
+["Escribe una expresión popular y explica qué significa.","Cualquier expresión popular correcta con su significado.","", "Se requiere valorar que el ejemplo sea popular y que la explicación corresponda; se revisa manualmente."],
+["¿Qué significa «el tiempo vuela» y qué recurso figurado utiliza?","Que el tiempo pasa muy rápido; es una metáfora o expresión figurada.","", "El tiempo no vuela literalmente: la expresión destaca lo rápido que pasa."],
+["Inventa una oración que contenga una personificación.","Una oración que atribuya una acción o cualidad humana a algo no humano.","", "Debe dar una acción humana a un animal, objeto o elemento natural; se revisa manualmente."],
+["¿Por qué un escritor utiliza expresiones figuradas en un poema o cuento?","Para crear imágenes, transmitir emociones y hacer el texto más expresivo.","crear imagenes|transmitir emociones|hacer el texto expresivo|dar expresividad|describir de forma imaginativa", "Las expresiones figuradas comunican ideas y emociones de manera más viva."]
+]},
+"Ciencias":{
+desc:"Desarrollo científico y tecnológico, clases de energía, energía eólica, fuentes renovables y no renovables y sus efectos ambientales.",
+topics:"Ciencia, tecnología y energía; usos de la energía eólica; tipos de energía; fuentes renovables y no renovables; efectos sobre el ambiente.",
+mc:[
+["¿Qué busca la ciencia?","Investigar y explicar fenómenos mediante observación y pruebas.","Evitar hacer preguntas.","Reemplazar toda la naturaleza.","Crear únicamente aparatos.",0,"La ciencia estudia fenómenos y construye explicaciones basadas en evidencias."],
+["¿Cuál es un ejemplo de tecnología que aprovecha el viento?","Un aerogenerador.","Una vela apagada.","Un libro de papel.","Una roca.",0,"Los aerogeneradores transforman la energía del viento en electricidad."],
+["La energía eólica proviene de…","el viento.","el petróleo.","el carbón.","el uranio exclusivamente.",0,"Eólica significa relacionada con el viento."],
+["¿Cuál es una fuente de energía renovable?","Viento.","Carbón mineral.","Petróleo.","Gas natural.",0,"El viento se repone de manera natural y no se agota por su uso."],
+["¿Cuál fuente se considera no renovable?","Luz solar.","Viento.","Petróleo.","Agua en movimiento.",2,"El petróleo tarda millones de años en formarse y sus reservas son limitadas."],
+["¿Qué transformación realiza un panel solar fotovoltaico?","Luz solar en energía eléctrica.","Sonido en petróleo.","Viento en carbón.","Electricidad en viento.",0,"Las celdas fotovoltaicas convierten la luz en electricidad."],
+["¿Qué beneficio puede ofrecer la energía eólica?","Generar electricidad sin quemar combustible durante su operación.","Producir petróleo.","Eliminar todo impacto ambiental.","Crear viento artificial ilimitado.",0,"No necesita combustión para generar electricidad, aunque sí puede tener impactos locales."],
+["¿Qué efecto puede causar la quema de carbón y petróleo?","Liberación de contaminantes y gases de efecto invernadero.","Desaparición de toda contaminación.","Producción de agua potable directamente.","Aumento de bosques por sí sola.",0,"La combustión libera sustancias que contaminan el aire y contribuyen al calentamiento global."],
+["¿Cuál ejemplo utiliza energía eléctrica en la vida cotidiana?","Encender una lámpara.","Una piedra quieta.","Un cuaderno cerrado.","Arena seca sin movimiento.",0,"La lámpara transforma energía eléctrica en luz y calor."],
+["¿Qué tipo de energía está asociada al movimiento?","Cinética.","Química solamente.","Nuclear solamente.","Sonora únicamente.",0,"La energía cinética es la energía que posee un cuerpo debido a su movimiento."],
+["¿Cuál es un ejemplo de energía química almacenada?","La energía de los alimentos.","El viento soplando.","La luz reflejada.","El sonido de una campana.",0,"Los alimentos almacenan energía química que el cuerpo puede aprovechar."],
+["¿Qué tecnología puede ayudar a usar energía con mayor eficiencia?","Lámparas LED.","Dejar luces encendidas sin necesidad.","Motores sin mantenimiento.","Quemar más combustible para la misma tarea.",0,"Las lámparas LED suelen consumir menos electricidad para producir iluminación."],
+["¿Cuál fuente genera electricidad aprovechando agua en movimiento?","Hidroeléctrica.","Eólica.","Geotérmica exclusivamente.","Combustión de carbón.",0,"Las centrales hidroeléctricas aprovechan la energía del agua en movimiento."],
+["¿Cuál afirmación sobre energías renovables es correcta?","Se reponen naturalmente en escalas de tiempo relativamente cortas.","Nunca requieren instalaciones.","No producen ningún impacto en ningún lugar.","Todas dependen del petróleo.",0,"Son fuentes que se renuevan naturalmente, aunque su aprovechamiento puede tener impactos."],
+["¿Cuál es una posible consecuencia ambiental de una mala gestión de residuos tecnológicos?","Contaminación por materiales peligrosos.","Creación automática de energía limpia.","Desaparición de los residuos.","Aumento garantizado de agua limpia.",0,"Algunos aparatos contienen sustancias que pueden contaminar si no se gestionan bien."],
+["¿Para qué se usa principalmente un aerogenerador?","Para convertir la energía del viento en electricidad.","Para extraer carbón.","Para fabricar lluvia.","Para almacenar petróleo.",0,"Las aspas capturan energía del viento y el generador produce electricidad."],
+["¿Qué práctica ayuda a ahorrar energía en casa?","Apagar luces y aparatos que no se utilizan.","Abrir el refrigerador constantemente.","Dejar todos los equipos encendidos.","Usar siempre la máxima iluminación.",0,"Evitar consumos innecesarios reduce el uso de electricidad."],
+["¿Cuál de estas opciones describe un avance tecnológico?","Un dispositivo que permite aprovechar mejor una fuente de energía.","Una superstición sin comprobación.","Una roca sin cambios.","Una palabra sin uso.",0,"La tecnología aplica conocimientos y herramientas para resolver necesidades."],
+["¿Por qué conviene evaluar los efectos ambientales de una fuente energética?","Para elegir opciones considerando beneficios, riesgos y contaminación.","Para asegurar que ninguna fuente tenga límites.","Para ignorar el impacto en comunidades.","Para producir energía sin planificación.",0,"La evaluación permite tomar decisiones más responsables y reducir daños."],
+["¿Qué afirmación distingue mejor las fuentes renovables de las no renovables?","Las renovables se reponen naturalmente; las no renovables son limitadas y tardan mucho en formarse.","Las renovables siempre contaminan más.","Las no renovables se reponen en unos minutos.","No existe diferencia entre ellas.",0,"La diferencia principal es la disponibilidad y el tiempo de reposición."]
+],
+match:[
+["Energía eólica","Aprovecha el viento."],["Energía solar","Aprovecha la radiación del Sol."],["Petróleo","Fuente no renovable."],["Hidroeléctrica","Aprovecha el movimiento del agua."],["Lámpara LED","Tecnología de iluminación eficiente."]
+],
+written:[
+["Menciona una aplicación cotidiana de la energía eólica.","Generar electricidad mediante aerogeneradores o molinos de viento.","generar electricidad|aerogeneradores|molinos de viento|producir electricidad con el viento","La energía eólica se aprovecha para generar electricidad."],
+["Explica una diferencia entre una fuente renovable y una no renovable.","La renovable se repone naturalmente; la no renovable es limitada y tarda muchísimo en formarse.","se repone naturalmente|recurso limitado|tarda millones de años|se renueva|no se renueva rápidamente","La diferencia central es la capacidad y el tiempo de reposición."],
+["Menciona un efecto ambiental de quemar combustibles fósiles.","Contaminación del aire o emisión de gases de efecto invernadero.","contaminacion del aire|gases de efecto invernadero|calentamiento global|contamina el aire","La combustión libera contaminantes y gases que afectan el clima."],
+["Escribe dos formas de ahorrar energía en el hogar.","Apagar luces, desconectar equipos que no se usan o utilizar iluminación eficiente.","apagar luces|desconectar aparatos|usar led|usar lámparas eficientes|apagar aparatos","Se deben mencionar dos acciones razonables de ahorro energético."],
+["¿Cómo contribuyen la ciencia y la tecnología al aprovechamiento de la energía?","Permiten investigar, diseñar y mejorar dispositivos y métodos para producir y usar energía.","investigar|diseñar|mejorar dispositivos|aprovechar la energia|producir energia eficientemente","La investigación y las herramientas tecnológicas permiten aprovechar mejor distintas fuentes."]
+]},
+"Matemáticas":{
+desc:"Tipos de medidas y sus usos; reconocimiento y representación de patrones numéricos y visuales y sucesiones simples.",
+topics:"Medidas de longitud, masa, tiempo, superficie y capacidad en situaciones cotidianas; sucesiones y patrones numéricos y visuales.",
+mc:[
+["¿Qué unidad es apropiada para medir la longitud de un lápiz?","Centímetros.","Kilogramos.","Litros.","Horas.",0,"Los centímetros miden longitudes pequeñas."],
+["¿Qué unidad usarías para expresar la masa de una sandía?","Kilogramos.","Metros.","Litros por hora.","Centímetros cuadrados.",0,"El kilogramo es una unidad de masa."],
+["¿Qué unidad es adecuada para medir la duración de una película?","Horas o minutos.","Kilogramos.","Metros cuadrados.","Litros.",0,"Las horas y los minutos miden tiempo."],
+["¿Qué unidad usarías para la capacidad de una botella de agua?","Litros o mililitros.","Metros.","Kilogramos por metro.","Horas cuadradas.",0,"Litros y mililitros expresan capacidad."],
+["¿Qué unidad permite medir la superficie de una cancha?","Metros cuadrados.","Metros cúbicos.","Kilogramos.","Minutos.",0,"La superficie o área se mide en unidades cuadradas."],
+["Completa la sucesión: 2, 4, 6, 8, __.","9","10","11","12",1,"Cada término aumenta en 2, así que sigue 10."],
+["Completa: 5, 10, 15, 20, __.","22","24","25","30",2,"Se suma 5 en cada paso."],
+["¿Cuál es la regla de 3, 6, 9, 12, 15?","Sumar 3.","Restar 3.","Multiplicar por 2.","Sumar 5.",0,"Cada término aumenta en tres unidades."],
+["Completa: 20, 18, 16, 14, __.","13","12","11","10",1,"La sucesión disminuye de dos en dos."],
+["Una cinta mide 2 metros. ¿Cuántos centímetros son?","20 cm","200 cm","2 000 cm","12 cm",1,"Un metro equivale a 100 centímetros; 2 m = 200 cm."],
+["Una bolsa contiene 3 kg de arroz y otra 2 kg. ¿Cuál es la masa total?","1 kg","5 kg","6 kg","32 kg",1,"Se suman 3 + 2 = 5 kilogramos."],
+["Una actividad comienza a las 8:00 y termina a las 9:30. ¿Cuánto dura?","30 minutos","1 hora","1 hora y 30 minutos","2 horas y 30 minutos",2,"De las 8:00 a las 9:30 transcurre una hora y media."],
+["¿Cuántos mililitros hay en 1 litro?","10","100","1 000","10 000",2,"Un litro equivale a 1 000 mililitros."],
+["Un rectángulo mide 4 m de largo y 3 m de ancho. ¿Cuál es su área?","7 m²","12 m²","14 m²","24 m²",1,"El área del rectángulo es largo × ancho: 4 × 3 = 12 m²."],
+["Completa el patrón: ▲ ● ▲ ● ▲ __.","▲","●","■","◆",1,"Las figuras alternan triángulo y círculo; sigue un círculo."],
+["Completa: 1, 2, 4, 8, __.","10","12","14","16",3,"Cada término se multiplica por 2."],
+["En una sucesión se suma 4 y comienza en 7. ¿Cuál es el segundo término?","3","7","11","28",2,"El segundo término es 7 + 4 = 11."],
+["¿Cuál situación requiere medir tiempo?","Calcular cuánto dura un viaje.","Pesar una mochila.","Medir el ancho de una mesa.","Calcular el área de un jardín.",0,"La duración de un viaje se expresa en segundos, minutos u horas."],
+["¿Cuál secuencia sigue un patrón de restar 5?","4, 9, 14, 19","30, 25, 20, 15","2, 4, 8, 16","1, 3, 6, 10",1,"Cada término de la sucesión disminuye en cinco."],
+["Una jarra tiene 2 litros de jugo. Se sirven 500 ml. ¿Cuánto queda?","500 ml","1 000 ml","1 500 ml","2 500 ml",2,"2 litros son 2 000 ml; 2 000 − 500 = 1 500 ml."]
+],
+match:[
+["Longitud","Centímetro o metro."],["Masa","Gramo o kilogramo."],["Tiempo","Segundo, minuto u hora."],["Capacidad","Litro o mililitro."],["Superficie","Metro cuadrado."]
+],
+written:[
+["Escribe los siguientes dos números de la sucesión: 4, 8, 12, 16, __, __.","20 y 24.","20 y 24|20, 24|20 24","La sucesión aumenta de cuatro en cuatro."],
+["Una cuerda mide 3 metros. ¿Cuántos centímetros mide? Explica cómo lo calculaste.","300 centímetros; 3 × 100 = 300.","300 cm|300 centimetros|3 x 100|trescientos centimetros","Cada metro contiene 100 centímetros."],
+["Nombra dos unidades que se pueden usar para medir capacidad.","Litros y mililitros.","litros|mililitros|l y ml","Ambas son unidades de capacidad."],
+["Inventa una sucesión numérica que aumente de 2 en 2 y escribe cinco términos.","Cualquier sucesión correcta de cinco términos que aumente en 2, por ejemplo 2, 4, 6, 8, 10.","","Se debe comprobar que haya cinco términos y que la diferencia sea siempre dos; se revisa manualmente."],
+["Un rectángulo tiene 5 m de largo y 2 m de ancho. Calcula su superficie.","10 metros cuadrados (5 × 2 = 10 m²).","10 m2|10 metros cuadrados|10|5 x 2","El área se calcula multiplicando largo por ancho."]
+]},
+"Estudios Sociales":{
+desc:"Garantías sociales y familiares y garantías ambientales establecidas o reconocidas en el marco de la Constitución Política costarricense.",
+topics:"Importancia de las garantías sociales y familiares; garantías sociales ambientales en el marco constitucional costarricense.",
+mc:[
+["¿Qué buscan las garantías sociales?","Proteger derechos y favorecer condiciones dignas de vida.","Eliminar todos los deberes ciudadanos.","Dar privilegios sin reglas.","Sustituir la Constitución.",0,"Las garantías sociales protegen derechos relacionados con el bienestar y la justicia social."],
+["¿Cuál es un ejemplo de derecho relacionado con la protección laboral?","Condiciones de trabajo dignas.","Prohibir toda educación.","Contaminar ríos sin límites.","Eliminar la atención de salud.",0,"Las normas laborales buscan proteger a las personas trabajadoras."],
+["¿Por qué son importantes las garantías familiares?","Ayudan a proteger el bienestar y los derechos de las personas en la familia.","Impiden que exista convivencia.","Eliminan la responsabilidad de cuidar.","Solo protegen los objetos del hogar.",0,"Las garantías relacionadas con la familia procuran protección y bienestar de sus integrantes."],
+["¿Qué institución es la Constitución Política?","La norma fundamental que organiza el Estado y reconoce derechos y deberes.","Una lista de compras.","Un reglamento deportivo privado.","Un mapa de carreteras.",0,"La Constitución establece la organización básica del Estado y derechos fundamentales."],
+["¿Qué conducta ayuda a proteger el ambiente?","Evitar contaminar ríos y disponer correctamente los residuos.","Arrojar basura a los ríos.","Desperdiciar agua intencionalmente.","Quemar residuos en cualquier lugar.",0,"Evitar la contaminación ayuda a proteger la salud y los ecosistemas."],
+["¿Por qué es importante proteger el derecho a un ambiente sano?","Porque el ambiente influye en la salud y la calidad de vida.","Porque permite contaminar sin consecuencias.","Porque solo importa a las fábricas.","Porque reemplaza todos los demás derechos.",0,"Un ambiente sano favorece la salud y el bienestar de las personas."],
+["¿Cuál es una responsabilidad ciudadana relacionada con el ambiente?","Usar responsablemente los recursos naturales.","Destruir áreas naturales.","Tirar desechos en espacios públicos.","Ignorar toda norma ambiental.",0,"La protección ambiental requiere conductas responsables."],
+["¿Qué relación existe entre garantías sociales y bienestar?","Buscan proteger derechos y mejorar las condiciones de vida.","No tienen ninguna relación con las personas.","Solo tratan sobre deportes.","Sirven únicamente para fijar precios.",0,"Estas garantías contribuyen a condiciones de vida dignas y a la protección de derechos."],
+["¿Cuál ejemplo se relaciona con la salud como parte del bienestar social?","Poder acceder a servicios de salud.","Impedir toda atención médica.","Contaminar el agua potable.","Prohibir la prevención de enfermedades.",0,"La salud es esencial para el bienestar individual y colectivo."],
+["¿Qué se debe hacer si una actividad contamina un río?","Prevenir la contaminación y cumplir las normas ambientales.","Aumentar los desechos.","Ignorar el problema.","Recomendar que otros también contaminen.",0,"Las acciones responsables buscan evitar daños al agua y a los ecosistemas."],
+["¿Qué significa que un derecho esté reconocido en la Constitución?","Que forma parte del marco fundamental de derechos y normas del país.","Que es solo una opinión personal.","Que se aplica únicamente en juegos.","Que puede ignorarse siempre.",0,"La Constitución es la norma fundamental del país."],
+["¿Cuál acción demuestra respeto por los derechos de otras personas?","Tratar a los demás con dignidad y respetar sus derechos.","Discriminar a quienes piensan diferente.","Impedir que otros expresen sus necesidades.","Ignorar la seguridad de la comunidad.",0,"El respeto a la dignidad y los derechos favorece la convivencia."],
+["¿Qué ejemplo muestra cuidado de un recurso natural?","Cerrar la llave cuando no se necesita agua.","Dejar correr el agua sin motivo.","Tirar aceite en el desagüe.","Desperdiciar agua potable.",0,"Ahorrar agua ayuda a cuidar un recurso necesario para la vida."],
+["¿Por qué las garantías sociales son importantes para las familias?","Contribuyen a proteger derechos y condiciones básicas de bienestar.","Obligan a que todas las familias sean iguales.","Eliminan el apoyo comunitario.","Se ocupan solo de objetos materiales.",0,"La protección social ayuda a que las familias vivan con dignidad."],
+["¿Qué conducta favorece un ambiente saludable en la comunidad?","Separar residuos cuando existe un sistema de reciclaje y no tirar basura.","Arrojar residuos a la calle.","Quemar plástico en el patio.","Verter sustancias en quebradas.",0,"La gestión responsable de residuos reduce la contaminación."],
+["¿Cuál opción es un ejemplo de participación responsable en la comunidad?","Colaborar en una jornada de limpieza de un parque.","Dañar los espacios públicos.","Dejar basura para que otros la recojan.","Desperdiciar recursos comunitarios.",0,"La participación comunitaria puede mejorar los espacios compartidos."],
+["¿Qué busca una norma de protección ambiental?","Prevenir daños y orientar el uso responsable de los recursos.","Permitir toda contaminación.","Eliminar los ecosistemas.","Evitar que se cuide el agua.",0,"Las normas ambientales ayudan a prevenir y controlar daños al ambiente."],
+["¿Cómo se relacionan la familia y la sociedad?","Las familias forman parte de la sociedad y necesitan condiciones de protección y bienestar.","No existe ninguna relación.","Las familias no tienen derechos.","La sociedad solo incluye edificios.",0,"Las familias forman parte de la comunidad y se benefician de la protección de derechos."],
+["¿Qué opción representa una garantía o derecho social, en sentido general?","Protección de condiciones dignas de vida y trabajo.","Derecho a contaminar sin límite.","Obligación de desperdiciar recursos.","Permiso para vulnerar derechos ajenos.",0,"Las garantías sociales buscan resguardar derechos y condiciones de bienestar."],
+["¿Cuál es una razón para conservar los recursos naturales?","Son importantes para la vida, la salud y las generaciones futuras.","Son ilimitados en todos los casos.","No tienen relación con las personas.","Solo sirven como decoración.",0,"Conservar recursos ayuda a sostener el bienestar actual y futuro."]
+],
+match:[
+["Constitución Política","Norma fundamental del país."],["Garantías sociales","Protección de derechos y bienestar social."],["Protección familiar","Promueve el bienestar y los derechos de integrantes de la familia."],["Ambiente sano","Condición importante para la salud y la calidad de vida."],["Responsabilidad ambiental","Prevenir la contaminación y cuidar los recursos."]
+],
+written:[
+["Explica por qué son importantes las garantías sociales para las familias.","Protegen derechos y contribuyen a condiciones dignas, seguridad y bienestar familiar.","protegen derechos|bienestar familiar|condiciones dignas|seguridad y bienestar","La respuesta debe relacionar las garantías con derechos y bienestar."],
+["Menciona dos acciones que ayuden a proteger el ambiente de tu comunidad.","Por ejemplo, no tirar basura y ahorrar agua; también reciclar o cuidar áreas verdes.","no tirar basura|ahorrar agua|reciclar|cuidar areas verdes|proteger los rios","Son ejemplos de acciones que reducen la contaminación y cuidan recursos."],
+["¿Qué función cumple la Constitución Política en Costa Rica?","Es la norma fundamental que organiza el Estado y reconoce derechos y deberes.","norma fundamental|organiza el estado|reconoce derechos|derechos y deberes","La Constitución establece bases de la organización estatal y de los derechos."],
+["Explica cómo un ambiente contaminado puede afectar a las personas.","Puede afectar la salud, contaminar el agua o el aire y reducir la calidad de vida.","afecta la salud|contamina el agua|contamina el aire|calidad de vida","La contaminación puede perjudicar la salud y el bienestar comunitario."],
+["¿Por qué las garantías sociales y la protección ambiental son importantes para la sociedad?","Ayudan a proteger los derechos, el bienestar de las personas y las condiciones ambientales necesarias para vivir.","proteger derechos|bienestar|ambiente sano|salud|calidad de vida","Ambos ámbitos contribuyen a la dignidad, la salud y el bienestar de la comunidad."]
+]}
+};
+const $=id=>document.getElementById(id);
+let subject=null,page=0,answers={},results=null;
+const parts=[
+{title:"Parte I: Selección única",pill:"Parte I",instruction:"Lea cuidadosamente cada pregunta y marque con una X la opción que considere correcta. Seleccione solamente una respuesta.",start:0,end:20},
+{title:"Parte II: Relacionar con líneas",pill:"Parte II",instruction:"Una cada elemento de la columna izquierda con la respuesta correcta de la columna derecha. Seleccione la opción correspondiente en cada menú.",start:20,end:25},
+{title:"Parte III: Respuesta escrita",pill:"Parte III",instruction:"Lea cada pregunta y escriba su respuesta de forma clara y completa. Si no sabe una respuesta, puede dejarla en blanco y volver después.",start:25,end:30}
+];
+function show(id){["home","directions","exam","results"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+document.querySelectorAll(".subject").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".subject").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");subject=b.dataset.subject;
+ $("selectedLabel").textContent="Materia seleccionada: "+subject;$("startBtn").disabled=false;
+}));
+$("startBtn").onclick=()=>{
+ const bank=banks[subject];$("directionTitle").textContent="Instrucciones · "+subject;$("directionSub").textContent=bank.desc;
+ $("coverageNote").textContent="Temas incluidos: "+bank.topics+" La prueba se limita a estos contenidos proporcionados.";
+ show("directions");
+};
+$("backHome").onclick=()=>show("home");
+$("beginExam").onclick=()=>{answers={};page=0;results=null;show("exam");renderPage()};
+$("prevBtn").onclick=()=>{if(page>0){saveVisible();page--;renderPage()}};
+$("nextBtn").onclick=()=>{saveVisible();if(page<2){page++;renderPage()}};
+$("finishBtn").onclick=()=>{saveVisible();const missing=countMissing();let msg="¿Desea finalizar el examen y ver los resultados?";if(missing)msg=`Todavía hay ${missing} pregunta(s) sin responder. ¿Desea finalizar de todos modos?`;if(confirm(msg)){grade();show("results")}};
+$("newExam").onclick=()=>{show("home");document.querySelectorAll(".subject").forEach(x=>x.classList.remove("selected"));subject=null;$("startBtn").disabled=true;$("selectedLabel").textContent="Primero, selecciona una materia."};
+$("retryBtn").onclick=()=>{answers={};page=0;show("exam");renderPage()};
+function allQs(){const b=banks[subject];return [...b.mc.map((q,i)=>({type:"mc",num:i+1,data:q})),...b.match.map((q,i)=>({type:"match",num:21+i,data:q})),...b.written.map((q,i)=>({type:"written",num:26+i,data:q}))]}
+function saveVisible(){const area=$("questionArea");area.querySelectorAll("[data-answer]").forEach(el=>{answers[el.dataset.answer]=el.value});area.querySelectorAll('input[type=radio]:checked').forEach(el=>{answers[el.name]=el.value})}
+function countMissing(){const qs=allQs();return qs.filter(q=>{let a=answers[q.num];return a===undefined||String(a).trim()===""}).length}
+function renderPage(){
+ const part=parts[page],qs=allQs().slice(part.start,part.end);
+ $("partPill").textContent=part.pill;$("examTitle").textContent=part.title;$("pageLabel").textContent=`Página ${page+1} de 3`;
+ $("partInstruction").textContent=part.instruction;$("prevBtn").disabled=page===0;
+ $("nextBtn").classList.toggle("hidden",page===2);$("finishBtn").classList.toggle("hidden",page!==2);
+ $("progressFill").style.width=(part.end/30*100)+"%";$("progressLabel").textContent=`Preguntas ${part.start+1}–${part.end} de 30 · ${30-countMissing()} respondidas`;
+ const area=$("questionArea");area.innerHTML="";
+ if(page===0)qs.forEach(q=>{
+  const [prompt,...rest]=q.data;const opts=rest.slice(0,4),correct=rest[4],exp=rest[5];
+  const box=document.createElement("div");box.className="question";
+  box.innerHTML=`<div class="qhead"><span class="qnum">${q.num}</span><div style="flex:1"><div class="qtitle">${esc(prompt)}</div><div class="options">${opts.map((o,i)=>`<label class="option"><input type="radio" name="${q.num}" value="${i}" ${String(answers[q.num])===String(i)?"checked":""}><span><b>${"ABCD"[i]}.</b> ${esc(o)}</span></label>`).join("")}</div></div></div>`;
+  area.appendChild(box)
+ });
+ if(page===1){
+  const b=banks[subject];const choices=b.match.map(x=>x[1]);
+  const box=document.createElement("div");box.className="question";
+  box.innerHTML=`<p class="muted">Elija una respuesta para cada concepto. Cada opción se puede usar una vez.</p><div class="match-grid"><div class="match-col"><h4>Columna A · Conceptos</h4>${b.match.map((x,i)=>`<div class="match-item"><label for="m${i}">${i+1}. ${esc(x[0])}</label><select data-answer="${21+i}" id="m${i}"><option value="">— Seleccione —</option>${choices.map((c,j)=>`<option value="${j}" ${String(answers[21+i])===String(j)?"selected":""}>${String.fromCharCode(65+j)}. ${esc(c)}</option>`).join("")}</select></div>`).join("")}</div><div class="match-col"><h4>Columna B · Respuestas</h4>${choices.map((c,i)=>`<div class="match-item"><label>${String.fromCharCode(65+i)}.</label><span>${esc(c)}</span></div>`).join("")}</div></div>`;
+  area.appendChild(box)
+ }
+ if(page===2)qs.forEach(q=>{
+  const [prompt,expected]=q.data;const box=document.createElement("div");box.className="question";
+  box.innerHTML=`<div class="qhead"><span class="qnum">${q.num}</span><div style="flex:1"><div class="qtitle">${esc(prompt)}</div><textarea data-answer="${q.num}" rows="3" placeholder="Escriba su respuesta aquí…">${esc(answers[q.num]||"")}</textarea></div></div>`;area.appendChild(box)
+ });
+}
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[¿?¡!.,;:()]/g," ").replace(/\s+/g," ").trim()}
+function grade(){
+ const b=banks[subject],qs=allQs();let correct=0,wrong=0,omitted=0,pending=0,earned=0;const reviews=[];
+ qs.forEach(q=>{
+  let ans=String(answers[q.num]??"").trim(),status="incorrect",correctAnswer="",explanation="",student=ans||"Sin respuesta";
+  if(q.type==="mc"){
+   const d=q.data;correctAnswer=d[d[4]+1];explanation=d[5];
+   if(!ans){status="omitted";omitted++}else if(Number(ans)===d[4]){status="correct";correct++;earned++}else wrong++;
+   student=ans?`${"ABCD"[Number(ans)]}. ${d[Number(ans)]}`:"Sin respuesta";
+  }else if(q.type==="match"){
+   const i=q.num-21;correctAnswer=b.match[i][1];explanation=`«${b.match[i][0]}» se relaciona con «${correctAnswer}».`;
+   if(!ans){status="omitted";omitted++}else if(Number(ans)===i){status="correct";correct++;earned++}else{wrong++;student=b.match[Number(ans)]?b.match[Number(ans)][1]:ans}
+  }else{
+   const d=q.data;correctAnswer=d[1];explanation=d[3];const keys=d[2].split("|").map(norm).filter(Boolean);const n=norm(ans);
+   if(!ans){status="omitted";omitted++}
+   else if(keys.length && keys.some(k=>n.includes(k))){status="correct";correct++;earned++}
+   else {status="pending";pending++}
+  }
+  reviews.push({q,status,student,correctAnswer,explanation});
+ });
+ const pct=Math.round(earned/30*100);$("scoreText").textContent=`${earned}/30`;$("scoreCircle").style.setProperty("--pct",pct+"%");
+ $("resultSubject").textContent="Materia: "+subject;$("percentPill").textContent=pct+" % de aciertos";
+ $("correctStat").textContent=correct;$("wrongStat").textContent=wrong;$("omittedStat").textContent=omitted;$("pendingStat").textContent=pending;
+ $("resultHeading").textContent=pct>=90?"¡Excelente trabajo!":pct>=70?"¡Vas por buen camino!":"Sigue practicando";
+ $("resultSummary").textContent=`Obtuviste ${earned} de 30 puntos automáticos. ${pending} respuesta(s) escrita(s) necesitan revisión porque podrían ser correctas aunque no coincidan con palabras clave. Las pendientes no se cuentan como incorrectas ni suman puntos hasta revisarse.`;
+ $("reviewArea").innerHTML="";
+ reviews.filter(r=>r.status!=="correct").forEach(r=>{
+  const q=r.q;const prompt=q.type==="mc"?q.data[0]:q.type==="match"?q.data[0]:q.data[0];
+  const statusText={incorrect:"Incorrecta",omitted:"Omitida",pending:"Pendiente de revisión"}[r.status];
+  const el=document.createElement("details");el.className="review";
+  el.innerHTML=`<summary><span class="status ${r.status}">${statusText}</span> &nbsp; Pregunta ${q.num}: ${esc(prompt)}</summary><div class="review-body"><div class="answer-line"><b>Tu respuesta:</b> ${esc(r.student)}</div><div class="answer-line"><b>Respuesta esperada:</b> ${esc(r.correctAnswer)}</div><div class="answer-line"><b>Explicación:</b> ${esc(r.explanation)}</div></div>`;
+  $("reviewArea").appendChild(el)
+ });
+ if(!reviews.some(r=>r.status!=="correct"))$("reviewArea").innerHTML='<p class="note">¡No hay respuestas incorrectas ni omitidas! Revisa de todos modos las respuestas escritas que el sistema haya marcado como correctas por palabras clave.</p>';
+}
+</script>
+</body>
+</html>
